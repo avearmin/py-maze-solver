@@ -27,6 +27,14 @@ class Window:
 
     def draw_cell(self, cell, fill_color):
         cell.draw(self.__canvas, fill_color)
+    
+    def draw_move(self, cell_1, cell_2, undo=False):
+        if undo:
+            fill_color = "gray"
+        else:
+            fill_color = "red"
+        cell_move_line = Line(cell_1.get_center(), cell_2.get_center())
+        self.draw_line(cell_move_line, fill_color)
 
 class Point:
     def __init__(self, x, y):
@@ -55,6 +63,12 @@ class Cell:
         self.__x2 = line.p2.x
         self.__y1 = line.p1.y
         self.__y2 = line.p2.y
+    
+    def get_center(self):
+        return Point(
+            (self.__x1 + self.__x2) / 2,
+            (self.__y1 + self.__y2) / 2
+        )
 
     def draw(self, canvas, fill_color):
         if self.has_left_wall:
