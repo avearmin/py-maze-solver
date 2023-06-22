@@ -77,6 +77,7 @@ class Maze:
 
         self.__create_entrance_and_exit(cells)
         self.__create_pathways(cells)
+        self.__reset_cells_visited(cells)
         return cells
 
     def __create_entrance_and_exit(self, cells):
@@ -104,7 +105,7 @@ class Maze:
             if possible_directions == 0:
                 return
             
-            direction = random.randint(0, possible_directions - 1)
+            direction = random.randrange(possible_directions)
             next_i, next_j = next_indexs[direction]
 
             if i - 1 == next_i:
@@ -124,5 +125,10 @@ class Maze:
                 cells[next_i][next_j].has_top_wall = False
 
             self.__create_pathways(cells, next_i, next_j)
+    
+    def __reset_cells_visited(self, cells):
+        for row in cells:
+            for cell in row:
+                cell.visited = False
 
         
