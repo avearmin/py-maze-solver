@@ -36,3 +36,38 @@ class Cell:
             (self.__x1 + self.__x2) / 2,
             (self.__y1 + self.__y2) / 2
         )
+    
+class Maze:
+    def __init__(
+            self,
+            x1,
+            y1,
+            num_rows,
+            num_cols,
+            cell_size_x,
+            cell_size_y
+    ):
+        self.x1 = x1
+        self.y1 = y1
+        self.num_rows = num_rows
+        self.num_cols = num_cols
+        self.cell_size_x = cell_size_x
+        self.cell_size_y = cell_size_y
+        self._cells = self.__create_cells()
+
+    def __create_cells(self):
+        cells = []
+        for i in range(self.num_cols):
+            cells.append([])
+            
+            for j in range(self.num_rows):
+                x1 = self.x1 + i * self.cell_size_x
+                y1 = self.y1 + j * self.cell_size_y
+                x2 = x1 + self.cell_size_x
+                y2 = y1 + self.cell_size_y
+
+                line = Line(Point(x1, y1), Point(x2, y2))
+
+                cells[i].append(Cell(line))
+
+        return cells

@@ -1,5 +1,6 @@
 from tkinter import Tk, BOTH, Canvas
 from geometry import Line
+import time
 
 class Window:
     def __init__(self, width, height):
@@ -52,6 +53,12 @@ class Window:
                 fill=fill_color, width=2
             )
         self.__canvas.pack()
+
+    def draw_maze(self, maze, fill_color):
+        for col in maze._cells:
+            for cell in col:
+                self.draw_cell(cell, fill_color)
+                self._animate()
     
     def draw_move(self, cell_1, cell_2, undo=False):
         if undo:
@@ -60,3 +67,7 @@ class Window:
             fill_color = "red"
         cell_move_line = Line(cell_1.get_center(), cell_2.get_center())
         self.draw_line(cell_move_line, fill_color)
+
+    def _animate(self):
+        self.redraw()
+        time.sleep(0.05)
