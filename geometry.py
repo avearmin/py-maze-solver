@@ -1,3 +1,5 @@
+import random
+
 class Point:
     def __init__(self, x, y):
         self.x = x
@@ -10,6 +12,7 @@ class Line:
 
 class Cell:
     def __init__(self, line):
+        self.visited = False
         self.has_left_wall = True
         self.has_right_wall = True
         self.has_top_wall = True
@@ -45,7 +48,8 @@ class Maze:
             num_rows,
             num_cols,
             cell_size_x,
-            cell_size_y
+            cell_size_y,
+            seed=0
     ):
         self.x1 = x1
         self.y1 = y1
@@ -54,6 +58,7 @@ class Maze:
         self.cell_size_x = cell_size_x
         self.cell_size_y = cell_size_y
         self._cells = self.__create_cells()
+        self.seed = random.seed(0)
 
     def __create_cells(self):
         cells = []
@@ -70,4 +75,54 @@ class Maze:
 
                 cells[i].append(Cell(line))
 
+        self.__create_entrance_and_exit(cells)
+        self.__create_pathways(cells)
         return cells
+
+    def __create_entrance_and_exit(self, cells):
+        cells[0][0].has_top_wall = False
+        cells[-1][-1].has_bottom_wall = False
+
+    def __create_pathways(self, cells, i=0, j=0):
+        cells[i][j].visited = True
+        while True:
+            next_indexs = []
+
+            if i > 0 and not cells[i - 1][j].visited:
+                next_indexs.append((i - 1, j))
+            
+            if i < self.num_cols - 1 and not cells[i + 1][j].visited:
+                next_indexs.append((i + 1, j))
+            
+            if j > 0 and not cells[i][j - 1].visited:
+                next_indexs.append((i, j - 1))
+            
+            if j < self.num_rows - 1 and not cells[i][j + 1].visited:
+                next_indexs.append((i, j + 1))
+            
+            possible_directions = len(next_indexs)
+            if possible_directions == 0:
+                return
+            
+            direction = random.randint(0, possible_directions - 1)
+            next_i, next_j = next_indexs[direction]
+
+            if i - 1 == next_i:
+                cells[i][j].has_left_wall = False
+                cells[next_i][next_j].has_right_wall = False
+            
+            if i + 1 == next_i:
+                cells[i][j].has_right_wall = False
+                cells[next_i][next_j].has_left_wall = False
+            
+            if j - 1 == next_j:
+                cells[i][j].has_top_wall = False
+                cells[next_i][next_j].has_bottom_wall = False
+
+            if j + 1 == next_j:
+                cells[i][j].has_bottom_wall = False
+                cells[next_i][next_j].has_top_wall = False
+
+            self.__create_pathways(cells, next_i, next_j)
+
+        
