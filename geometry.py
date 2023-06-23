@@ -49,7 +49,6 @@ class Maze:
             num_cols,
             cell_size_x,
             cell_size_y,
-            seed=0
     ):
         self.x1 = x1
         self.y1 = y1
@@ -58,7 +57,6 @@ class Maze:
         self.cell_size_x = cell_size_x
         self.cell_size_y = cell_size_y
         self._cells = self.__create_cells()
-        self.seed = random.seed(0)
 
     def __create_cells(self):
         cells = []

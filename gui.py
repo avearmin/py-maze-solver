@@ -58,15 +58,12 @@ class Window:
         for col in maze._cells:
             for cell in col:
                 self.draw_cell(cell, fill_color)
-                self._animate()
     
-    def draw_move(self, cell_1, cell_2, undo=False):
-        if undo:
-            fill_color = "gray"
-        else:
-            fill_color = "red"
-        cell_move_line = Line(cell_1.get_center(), cell_2.get_center())
-        self.draw_line(cell_move_line, fill_color)
+    def draw_route(self, maze_solver_route):
+        for movement in maze_solver_route:
+            move_line = Line(movement.cell_1.get_center(), movement.cell_2.get_center())
+            self.draw_line(move_line, "red")
+            self._animate()
 
     def _animate(self):
         self.redraw()
