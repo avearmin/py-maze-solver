@@ -1,11 +1,20 @@
 from tkinter import Tk, BOTH, Canvas
-from geometry import Line
 import time
+
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+class Line:
+    def __init__(self, p1, p2):
+        self.p1 = p1
+        self.p2 = p2
 
 class Window:
     def __init__(self, width, height):
         self.__root = Tk()
-        self.__canvas = Canvas(self.__root, width=width, height=height)
+        self.__canvas = Canvas(self.__root, width=width, height=height, background="white")
         self.__is_window_running = False
         
         self.__root.title("Maze Solver")
@@ -31,40 +40,65 @@ class Window:
             )
         self.__canvas.pack()
 
-    def draw_cell(self, cell, fill_color):
+    def draw_cell(self, cell, fill_color="black"):
         if cell.has_left_wall:
             self.__canvas.create_line(
-                cell.get_x1(), cell.get_y1(), cell.get_x1(), cell.get_y2(),
+                cell.x1, cell.y1, cell.x1, cell.y2,
                 fill=fill_color, width=2
             )
+        else:
+            self.__canvas.create_line(
+                cell.x1, cell.y1, cell.x1, cell.y2,
+                fill="white", width=2
+            )
+
         if cell.has_top_wall:
             self.__canvas.create_line(
-                cell.get_x1(), cell.get_y1(), cell.get_x2(), cell.get_y1(),
+                cell.x1, cell.y1, cell.x2, cell.y1,
                 fill=fill_color, width=2
             )
+        else:
+            self.__canvas.create_line(
+                cell.x1, cell.y1, cell.x2, cell.y1,
+                fill="white", width=2
+            )
+
         if cell.has_right_wall:
             self.__canvas.create_line(
-                cell.get_x2(), cell.get_y1(), cell.get_x2(), cell.get_y2(),
+                cell.x2, cell.y1, cell.x2, cell.y2,
                 fill=fill_color, width=2
             )
+        else:
+            self.__canvas.create_line(
+                cell.x2, cell.y1, cell.x2, cell.y2,
+                fill="white", width=2
+            )
+
         if cell.has_bottom_wall:
             self.__canvas.create_line(
-                cell.get_x1(), cell.get_y2(), cell.get_x2(), cell.get_y2(),
+                cell.x1, cell.y2, cell.x2, cell.y2,
                 fill=fill_color, width=2
             )
+        else:
+            self.__canvas.create_line(
+                cell.x1, cell.y2, cell.x2, cell.y2,
+                fill="white", width=2
+            )
+
         self.__canvas.pack()
-
-    def draw_maze(self, maze, fill_color):
-        for col in maze._cells:
-            for cell in col:
-                self.draw_cell(cell, fill_color)
     
-    def draw_route(self, maze_solver_route):
-        for movement in maze_solver_route:
-            move_line = Line(movement.cell_1.get_center(), movement.cell_2.get_center())
-            self.draw_line(move_line, "red")
-            self._animate()
+    def draw_move(self, cell_1, cell_2, undo=False):
+        fill_color = "red"
+        if undo:
+            fill_color = "gray"
 
-    def _animate(self):
+        x1, y1 = cell_1.get_center()
+        x2, y2 = cell_2.get_center()
+        line = Line(
+            Point(x1, y1), Point(x2, y2)
+        )
+        self.draw_line(line, fill_color)
+
+    def animate(self):
         self.redraw()
         time.sleep(0.05)

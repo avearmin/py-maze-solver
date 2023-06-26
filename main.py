@@ -1,17 +1,10 @@
 from gui import Window
-from geometry import Maze
-from maze_solver import MazeSolver
+from maze import Maze
 
 def main():
     window = Window(800, 600)
-       
-    maze = Maze(250, 125, 30, 30, 10, 10)
-
-    maze_solver = MazeSolver(maze)
-
-    window.draw_maze(maze, "black")
-    window.draw_route(maze_solver.route)
-
+    maze = Maze(40, 35, 13, 18, 40, 40, window)
+    maze.solve()
     window.wait_for_close()
 
 main()
