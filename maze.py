@@ -44,7 +44,7 @@ class Maze:
                 cell = self.__create_cell(i, j)
                 self._cells[i].append(cell)
                 self._window.draw_cell(cell)
-                self._window.animate()
+                self._window.animate(0.01)
 
         self.__create_entrance_and_exit()
         self.__create_pathways()
@@ -84,7 +84,7 @@ class Maze:
             possible_directions = len(next_indexs)
             if possible_directions == 0:
                 self._window.draw_cell(self._cells[i][j])
-                self._window.animate()
+                self._window.animate(0.05)
                 return
             
             direction = random.randrange(possible_directions)
@@ -139,11 +139,11 @@ class Maze:
             next_i, next_j = indexs
 
             self._window.draw_move(self._cells[i][j], self._cells[next_i][next_j])
-            self._window.animate()
+            self._window.animate(0.05)
             if self.__solve_r(next_i, next_j):
                 return True
             self._window.draw_move(self._cells[i][j], self._cells[next_i][next_j], True)
-            self._window.animate()
+            self._window.animate(0.2)
 
         return False
 

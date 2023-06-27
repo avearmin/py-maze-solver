@@ -99,6 +99,6 @@ class Window:
         )
         self.draw_line(line, fill_color)
 
-    def animate(self):
+    def animate(self, num):
         self.redraw()
-        time.sleep(0.05)
+        time.sleep(num)
