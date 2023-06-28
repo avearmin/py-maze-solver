@@ -12,7 +12,7 @@ class InputHandler:
     def on_key_press(self, event):
         i = self.i
         j = self.j
-        self.window.draw_cell(self.maze._cells[i][j], "blue")
+
         if event.keysym == "Left":
             if i > 0:
                 if not self.maze._cells[i][j].has_left_wall:
