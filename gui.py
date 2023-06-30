@@ -1,5 +1,5 @@
 from tkinter import Tk, BOTH, Canvas
-import time
+import time, sys
 
 class Point:
     def __init__(self, x, y):
@@ -32,6 +32,8 @@ class Window:
     
     def close(self):
         self._is_window_running = False
+        self._root.destroy()
+        sys.exit()
 
     def draw_line(self, line, fill_color):
         self._canvas.create_line(
