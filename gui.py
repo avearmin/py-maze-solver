@@ -89,17 +89,9 @@ class Window:
 
         self._canvas.pack()
     
-    def draw_move(self, cell_1, cell_2, undo=False):
-        fill_color = "red"
-        if undo:
-            fill_color = "gray"
-
-        x1, y1 = cell_1.get_center()
-        x2, y2 = cell_2.get_center()
-        line = Line(
-            Point(x1, y1), Point(x2, y2)
-        )
-        self.draw_line(line, fill_color)
+    def move_img(self, img, to_cell):
+        x, y = to_cell.get_center()
+        self._canvas.coords(img, x, y)
 
     def animate(self, num):
         self.redraw()
