@@ -1,16 +1,6 @@
 from tkinter import Tk, BOTH, Canvas
 import time, sys
 
-class Point:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-class Line:
-    def __init__(self, p1, p2):
-        self.p1 = p1
-        self.p2 = p2
-
 class Window:
     def __init__(self, width, height):
         self._root = Tk()
@@ -34,13 +24,6 @@ class Window:
         self._is_window_running = False
         self._root.destroy()
         sys.exit()
-
-    def draw_line(self, line, fill_color):
-        self._canvas.create_line(
-            line.p1.x, line.p1.y, line.p2.x, line.p2.y, 
-            fill=fill_color, width=2
-            )
-        self._canvas.pack()
 
     def draw_cell(self, cell, fill_color="black"):
         if cell.has_left_wall:
