@@ -17,7 +17,7 @@ class Window:
     
     def wait_for_close(self):
         self._is_window_running = True
-        while self.__is_window_running:
+        while self._is_window_running:
             self.redraw()
     
     def close(self):
@@ -72,9 +72,9 @@ class Window:
 
         self._canvas.pack()
     
-    def move_img(self, img, to_cell):
+    def move_img(self, img_id, to_cell):
         x, y = to_cell.get_center()
-        self._canvas.coords(img, x, y)
+        self._canvas.coords(img_id, x, y)
 
     def animate(self, num):
         self.redraw()

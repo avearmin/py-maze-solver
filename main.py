@@ -6,12 +6,14 @@ def main():
     window = Window(1600, 600)
     maze = Maze(40, 35, 13, 18, 40, 40, window, 1)
     
-    computer = players.Computer(window, maze)
-    human = players.Human(window, maze)
+    player_manager = players.PlayerManager(window, maze)
 
-    threading.Thread(target=computer.solve, daemon=True).start()
-    human.start()
-    
+    thread = threading.Thread(target=player_manager.computer_start, daemon=True)
+
+    thread.start()
+    player_manager.human_start()
+
+    thread.join()
     
     window.wait_for_close()
 

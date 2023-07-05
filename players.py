@@ -1,70 +1,80 @@
 from tkinter import PhotoImage
 
-class Human:
+class PlayerManager:
     def __init__(self, window, maze):
+        self.terminate = False
         self.window = window
         self.maze = maze
-        self.i = 0
-        self.j = 0
-        self.img = PhotoImage(file="images/heart.png").subsample(
-            maze.cell_size_x // 2, maze.cell_size_y // 2
-            )
-        x, y = self.maze._cells[0][0].get_center()
-        self.img_id = self.window._canvas.create_image(x, y, image=self.img)
+        self.human = Human()
+        self.computer = Computer()
 
-    def start(self):
+        self.human.initalize(window, maze)
+        self.computer.initialize(window, maze)
+
+    def human_start(self):
         self.window._root.bind("<KeyPress>", self.on_key_press)
         self.window._root.bind("<KeyRelease>", self.on_key_release)
         self.window._root.mainloop()
 
+    def human_stop(self):
+        self.window._root.unbind("<KeyPress>")
+        self.window._root.unbind("<KeyRelease>")
+        self.window._root.quit()
+
     def on_key_press(self, event):
-        i = self.i
-        j = self.j
+        i = self.human.i
+        j = self.human.j
 
         if event.keysym == "Left":
             if i > 0:
                 if not self.maze._cells[i][j].has_left_wall:
-                    self.window.move_img(self.img_id, self.maze._cells[i - 1][j])
-                    self.i = i - 1
+                    self.window.move_img(self.human.img_id, self.maze._cells[i - 1][j])
+                    self.human.i = i - 1
+                    if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
+                        self.terminate = True
+                        self.human_stop()
 
         if event.keysym == "Right":
             if i < self.maze.num_cols - 1:
                 if not self.maze._cells[i][j].has_right_wall:
-                    self.window.move_img(self.img_id, self.maze._cells[i + 1][j])
-                    self.i = i + 1
+                    self.window.move_img(self.human.img_id, self.maze._cells[i + 1][j])
+                    self.human.i = i + 1
+                    if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
+                        self.terminate = True
+                        self.human_stop()
 
         if event.keysym == "Up":
             if j > 0:
                 if not self.maze._cells[i][j].has_top_wall:
-                    self.window.move_img(self.img_id, self.maze._cells[i][j - 1])
-                    self.j = j - 1
+                    self.window.move_img(self.human.img_id, self.maze._cells[i][j - 1])
+                    self.human.j = j - 1
+                    if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
+                        self.terminate = True
+                        self.human_stop()
 
         if event.keysym == "Down":    
             if j < self.maze.num_rows - 1:
                 if not self.maze._cells[i][j].has_bottom_wall:
-                    self.window.move_img(self.img_id, self.maze._cells[i][j + 1])
-                    self.maze._cells[i][j + 1].visited = True
-                    self.j = j + 1
+                    self.window.move_img(self.human.img_id, self.maze._cells[i][j + 1])
+                    self.human.j = j + 1
+                    if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
+                        self.terminate = True
+                        self.human_stop()
         
     def on_key_release(self, event):
         pass 
 
-class Computer:
-    def __init__(self, window, maze):
-        self.window = window
-        self.maze = maze
-        self.img = PhotoImage(file="images/computer.png").subsample(
-            maze.cell_size_x // 2, maze.cell_size_y // 2
-            )
-        x, y = self.maze._cells[0][0].get_center()
-        self.img_id = self.window._canvas.create_image(x, y, image=self.img)
-    
-    def solve(self):
+    def computer_start(self):
         return self.__solve_r()
     
     def __solve_r(self, i=0, j=0):
+        if self.terminate:
+            return
+        
         self.maze._cells[i][j].visited = True
         if i == self.maze.num_cols - 1 and j == self.maze.num_rows - 1:
+            self.terminate = True
+            self.human_stop()
             return True
 
         next_indexs = []
@@ -84,14 +94,49 @@ class Computer:
         for indexs in next_indexs:
             next_i, next_j = indexs
 
-            self.window.move_img(self.img_id, self.maze._cells[next_i][next_j])
+            self.window.move_img(self.computer.img_id, self.maze._cells[next_i][next_j])
             self.window.animate(0.05)
+            
+            if self.terminate:
+                return
+            
             if self.__solve_r(next_i, next_j):
                 return True
-            self.window.move_img(self.img_id, self.maze._cells[next_i][next_j])
+            
+            if self.terminate:
+                return
+            
+            self.window.move_img(self.computer.img_id, self.maze._cells[next_i][next_j])
             self.window.animate(0.2)
 
         return False
+
+class Human:
+    def __init__(self):
+        self.i = 0
+        self.j = 0
+        self.img = None
+        self.img_id = None
+
+    def initalize(self, window, maze):
+        self.img = PhotoImage(file="images/heart.png").subsample(
+            maze.cell_size_x // 2, maze.cell_size_y // 2
+            )
+        x, y = maze._cells[0][0].get_center()
+        self.img_id = window._canvas.create_image(x, y, image=self.img)
+
+class Computer:
+    def __init__(self):
+        self.img = None
+        self.img_id = None
+
+    def initialize(self, window, maze):
+        self.is_playing = True
+        self.img = PhotoImage(file="images/computer.png").subsample(
+            maze.cell_size_x // 2, maze.cell_size_y // 2
+            )
+        x, y = maze._cells[0][0].get_center()
+        self.img_id = window._canvas.create_image(x, y, image=self.img)
 
 
         
