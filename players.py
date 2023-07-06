@@ -28,7 +28,7 @@ class PlayerManager:
         if event.keysym == "Left":
             if i > 0:
                 if not self.maze._cells[i][j].has_left_wall:
-                    self.window.move_img(self.human.img_id, self.maze._cells[i - 1][j])
+                    self.window.game_frame.move_img(self.human.img_id, self.maze._cells[i - 1][j])
                     self.human.i = i - 1
                     if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
                         self.terminate = True
@@ -37,7 +37,7 @@ class PlayerManager:
         if event.keysym == "Right":
             if i < self.maze.num_cols - 1:
                 if not self.maze._cells[i][j].has_right_wall:
-                    self.window.move_img(self.human.img_id, self.maze._cells[i + 1][j])
+                    self.window.game_frame.move_img(self.human.img_id, self.maze._cells[i + 1][j])
                     self.human.i = i + 1
                     if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
                         self.terminate = True
@@ -46,7 +46,7 @@ class PlayerManager:
         if event.keysym == "Up":
             if j > 0:
                 if not self.maze._cells[i][j].has_top_wall:
-                    self.window.move_img(self.human.img_id, self.maze._cells[i][j - 1])
+                    self.window.game_frame.move_img(self.human.img_id, self.maze._cells[i][j - 1])
                     self.human.j = j - 1
                     if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
                         self.terminate = True
@@ -55,7 +55,7 @@ class PlayerManager:
         if event.keysym == "Down":    
             if j < self.maze.num_rows - 1:
                 if not self.maze._cells[i][j].has_bottom_wall:
-                    self.window.move_img(self.human.img_id, self.maze._cells[i][j + 1])
+                    self.window.game_frame.move_img(self.human.img_id, self.maze._cells[i][j + 1])
                     self.human.j = j + 1
                     if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
                         self.terminate = True
@@ -94,7 +94,7 @@ class PlayerManager:
         for indexs in next_indexs:
             next_i, next_j = indexs
 
-            self.window.move_img(self.computer.img_id, self.maze._cells[next_i][next_j])
+            self.window.game_frame.move_img(self.computer.img_id, self.maze._cells[next_i][next_j])
             self.window.animate(0.05)
             
             if self.terminate:
@@ -106,7 +106,7 @@ class PlayerManager:
             if self.terminate:
                 return
             
-            self.window.move_img(self.computer.img_id, self.maze._cells[next_i][next_j])
+            self.window.game_frame.move_img(self.computer.img_id, self.maze._cells[next_i][next_j])
             self.window.animate(0.2)
 
         return False
@@ -123,7 +123,7 @@ class Human:
             maze.cell_size_x // 2, maze.cell_size_y // 2
             )
         x, y = maze._cells[0][0].get_center()
-        self.img_id = window._canvas.create_image(x, y, image=self.img)
+        self.img_id = window.game_frame.canvas.create_image(x, y, image=self.img)
 
 class Computer:
     def __init__(self):
@@ -136,7 +136,7 @@ class Computer:
             maze.cell_size_x // 2, maze.cell_size_y // 2
             )
         x, y = maze._cells[0][0].get_center()
-        self.img_id = window._canvas.create_image(x, y, image=self.img)
+        self.img_id = window.game_frame.canvas.create_image(x, y, image=self.img)
 
 
         

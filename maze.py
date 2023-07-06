@@ -25,7 +25,6 @@ class Maze:
             cell_size_x,
             cell_size_y,
             window, 
-            seed
     ):
         self.x1 = x1
         self.y1 = y1
@@ -34,7 +33,6 @@ class Maze:
         self.cell_size_x = cell_size_x
         self.cell_size_y = cell_size_y
         self._window = window
-        self.seed = random.seed(seed)
         self._cells = []
         self.__create_cells()
 
@@ -45,7 +43,7 @@ class Maze:
             for j in range(self.num_rows):
                 cell = self.__create_cell(i, j)
                 self._cells[i].append(cell)
-                self._window.draw_cell(cell)
+                self._window.game_frame.draw_cell(cell)
 
         self.__create_entrance_and_exit()
         self.__create_pathways()
@@ -61,9 +59,9 @@ class Maze:
 
     def __create_entrance_and_exit(self):
         self._cells[0][0].has_top_wall = False
-        self._window.draw_cell(self._cells[0][0])
+        self._window.game_frame.draw_cell(self._cells[0][0])
         self._cells[-1][-1].has_bottom_wall = False
-        self._window.draw_cell(self._cells[-1][-1])
+        self._window.game_frame.draw_cell(self._cells[-1][-1])
 
     def __create_pathways(self, i=0, j=0):
         self._cells[i][j].visited = True
@@ -84,7 +82,7 @@ class Maze:
             
             possible_directions = len(next_indexs)
             if possible_directions == 0:
-                self._window.draw_cell(self._cells[i][j])
+                self._window.game_frame.draw_cell(self._cells[i][j])
                 return
             
             direction = random.randrange(possible_directions)
