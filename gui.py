@@ -1,5 +1,5 @@
 from tkinter import *
-import time, sys
+import time
 
 class StartFrame:
     def __init__(self, root, width, height):
@@ -92,10 +92,6 @@ class Window:
         self._root.resizable(False, False)
         self._root.title("Maze Solver")
 
-        self.results_frame.close_button.config(command=self.close)
-
-        self._root.protocol("WM_DELETE_WINDOW", self.close)
-
         self.display_start_frame()
     
     def display_frame(self, frame):
@@ -121,10 +117,6 @@ class Window:
         self._is_window_running = True
         while self._is_window_running:
             self.redraw()
-    
-    def close(self):
-        self._root.destroy()
-        sys.exit()
 
     def animate(self, num):
         self.redraw()
