@@ -94,11 +94,11 @@ class PlayerManager:
         for indexs in next_indexs:
             next_i, next_j = indexs
 
-            self.window.game_frame.move_img(self.computer.img_id, self.maze._cells[next_i][next_j])
-            self.window.animate(0.05)
-            
             if self.terminate:
                 return
+            
+            self.window.game_frame.move_img(self.computer.img_id, self.maze._cells[next_i][next_j])
+            self.window.animate(0.05)
             
             if self.__solve_r(next_i, next_j):
                 return True
