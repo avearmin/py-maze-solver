@@ -33,6 +33,7 @@ class PlayerManager:
                     if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
                         self.terminate = True
                         self.human_stop()
+                        self.window.results_frame.label.config(text="The Human Wins!")
 
         if event.keysym == "Right":
             if i < self.maze.num_cols - 1:
@@ -42,6 +43,7 @@ class PlayerManager:
                     if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
                         self.terminate = True
                         self.human_stop()
+                        self.window.results_frame.label.config(text="The Human Wins!")
 
         if event.keysym == "Up":
             if j > 0:
@@ -51,6 +53,7 @@ class PlayerManager:
                     if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
                         self.terminate = True
                         self.human_stop()
+                        self.window.results_frame.label.config(text="The Human Wins!")
 
         if event.keysym == "Down":    
             if j < self.maze.num_rows - 1:
@@ -60,6 +63,7 @@ class PlayerManager:
                     if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
                         self.terminate = True
                         self.human_stop()
+                        self.window.results_frame.label.config(text="The Human Wins!")
         
     def on_key_release(self, event):
         pass 
@@ -75,6 +79,7 @@ class PlayerManager:
         if i == self.maze.num_cols - 1 and j == self.maze.num_rows - 1:
             self.terminate = True
             self.human_stop()
+            self.window.results_frame.label.config(text="The Computer Wins!")
             return True
 
         next_indexs = []
