@@ -1,12 +1,17 @@
-from tkinter import Tk, BOTH, Canvas, Frame, Button
+from tkinter import *
 import time, sys
 
 class StartFrame:
-    def __init__(self, root):
-        self.frame = Frame(root, bg="white")
-        self.start_button = Button(self.frame, text="Start Game")
-        self.start_button.pack()
-    
+    def __init__(self, root, width, height):
+        self.frame = Frame(root, width=width, height=height)
+        self.label = Label(self.frame, text="Python Maze Race", font=("helvetica", 24))
+        self.start_button = Button(self.frame, text="Start Game", font=("helvetica", 24))
+
+        self.frame.pack()
+
+        self.label.place(relx=0.5, rely=0.4, anchor=CENTER)
+        self.start_button.place(relx=0.5, rely=0.5, anchor=CENTER)
+
 class GameFrame:
     def __init__(self, root, width, height):
         self.frame = Frame(root, bg="blue")
@@ -71,7 +76,7 @@ class ResultsFrame:
 class Window:
     def __init__(self, width, height):
         self._root = Tk()
-        self.start_frame = StartFrame(self._root)
+        self.start_frame = StartFrame(self._root, width, height)
         self.game_frame = GameFrame(self._root, width, height)
         self.results_frame = ResultsFrame(self._root)
         self._is_window_running = False
@@ -109,7 +114,6 @@ class Window:
             self.redraw()
     
     def close(self):
-        self._is_window_running = False
         self._root.destroy()
         sys.exit()
 
