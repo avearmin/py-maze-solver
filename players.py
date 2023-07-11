@@ -78,7 +78,7 @@ class PlayerManager:
         self.maze._cells[i][j].visited = True
         if i == self.maze.num_cols - 1 and j == self.maze.num_rows - 1:
             self.stop_player_manager()
-            self.window.results_frame.update_results_label("computer")
+            self.window.results_frame.label.config(text="The Computer Wins!")
             return True
 
         next_indexs = []
