@@ -21,6 +21,10 @@ class PlayerManager:
         self.window._root.unbind("<KeyRelease>")
         self.window._root.quit()
 
+    def stop_player_manager(self):
+        self.terminate = True
+        self.human_stop()
+
     def on_key_press(self, event):
         i = self.human.i
         j = self.human.j
@@ -31,8 +35,7 @@ class PlayerManager:
                     self.window.game_frame.move_img(self.human.img_id, self.maze._cells[i - 1][j])
                     self.human.i = i - 1
                     if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
-                        self.terminate = True
-                        self.human_stop()
+                        self.stop_player_manager()
                         self.window.results_frame.label.config(text="The Human Wins!")
 
         if event.keysym == "Right":
@@ -41,8 +44,7 @@ class PlayerManager:
                     self.window.game_frame.move_img(self.human.img_id, self.maze._cells[i + 1][j])
                     self.human.i = i + 1
                     if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
-                        self.terminate = True
-                        self.human_stop()
+                        self.stop_player_manager()
                         self.window.results_frame.label.config(text="The Human Wins!")
 
         if event.keysym == "Up":
@@ -51,8 +53,7 @@ class PlayerManager:
                     self.window.game_frame.move_img(self.human.img_id, self.maze._cells[i][j - 1])
                     self.human.j = j - 1
                     if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
-                        self.terminate = True
-                        self.human_stop()
+                        self.stop_player_manager()
                         self.window.results_frame.label.config(text="The Human Wins!")
 
         if event.keysym == "Down":    
@@ -61,8 +62,7 @@ class PlayerManager:
                     self.window.game_frame.move_img(self.human.img_id, self.maze._cells[i][j + 1])
                     self.human.j = j + 1
                     if self.human.i == self.maze.num_cols - 1 and self.human.j == self.maze.num_rows - 1:
-                        self.terminate = True
-                        self.human_stop()
+                        self.stop_player_manager()
                         self.window.results_frame.label.config(text="The Human Wins!")
         
     def on_key_release(self, event):
@@ -77,9 +77,8 @@ class PlayerManager:
         
         self.maze._cells[i][j].visited = True
         if i == self.maze.num_cols - 1 and j == self.maze.num_rows - 1:
-            self.terminate = True
-            self.human_stop()
-            self.window.results_frame.label.config(text="The Computer Wins!")
+            self.stop_player_manager()
+            self.window.results_frame.update_results_label("computer")
             return True
 
         next_indexs = []
@@ -136,7 +135,6 @@ class Computer:
         self.img_id = None
 
     def initialize(self, window, maze):
-        self.is_playing = True
         self.img = PhotoImage(file="images/computer.png").subsample(
             maze.cell_size_x // 2, maze.cell_size_y // 2
             )
